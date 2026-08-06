@@ -26,7 +26,6 @@
                     <div class="col-lg-12 col-12">
                         <div class="card">
                             <div class="card-header">
-
                                 <a href="{{ url_for('add_user') }}" class="btn btn-primary">
                                     <i class="bi bi-plus-circle"></i>
                                     Add New User
@@ -45,22 +44,23 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for user in rows %}
-                                        <tr>
-                                            <td>{{ user.id }}</td>
+                                    {% for user in users %}
+                                            <tr>
+                                            <td>{{  user.id }}</td>
                                             <td>
                                                 <img
-                                                        src="{{ url_for('static', filename='admin/image/' ~ user.image) }}"
-                                                        alt="{{ user.username }}"
+                                                        src="{{ user.profile }}"
+                                                        alt=""
                                                         style="width: 50px; height: 50px; object-fit: contain; border-radius: 50%;"
                                                         onerror="this.src='{{ url_for('static', filename='admin/image/no_image.png') }}';"
                                                 >
                                             </td>
                                             <td>{{ user.username }}</td>
                                             <td>{{ user.email }}</td>
-                                            <td>{{ user.role }}</td>
                                             <td>
-                                                <!-- Add action buttons here -->
+                                                <span style="text-transform: uppercase">{{ user.role }}</span>
+                                            </td>
+                                            <td>
                                                 <a href="{{ url_for('edit_user', user_id=user.id) }}"
                                                    class="btn btn-sm btn-primary">
                                                     <i class="bi bi-pencil-square"></i>

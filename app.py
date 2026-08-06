@@ -1,7 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request
-import random
 from product import products as pro, get_product_by_category
-
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import text
@@ -86,12 +84,12 @@ def user():
     module = 'user'
     sql = text("SELECT * FROM user")
     result = db.session.execute(sql)
-    users = result.fetchall()
-    rows = [dict(row._mapping) for row in users]
+    rows = [dict(row._mapping) for row in result]
+
     return render_template(
         'admin/user/index.html',
         module=module,
-        rows=rows,
+        users=rows
     )
 
 
@@ -104,25 +102,62 @@ def add_user():
 @app.get('/admin/user/edit/<int:user_id>')
 def edit_user(user_id):
     module = 'user'
-    return render_template('admin/user/edit.html', module=module, user_id=user_id)
+    sql = text("SELECT * FROM user WHERE id = :user_id")
+    result = db.session.execute(sql, {"user_id": user_id}).fetchone()
+    user = None
+    if result:
+        user = dict(result._mapping)
+    else:
+        return redirect(url_for('user'))
+    return render_template(
+        'admin/user/edit.html',
+        module=module,
+        user=user
+    )
 
+
+@app.post('/admin/user/edit')
+def do_edit_user():
+    module = 'user'
+    form = request.form
+    user = User.query.get(form.get('user_id'))
+
+    user.username = form.get('username')
+    user.email = form.get('email')
+    user.password = form.get('password')
+    user.profile = 'new profile'
+    user.role = form.get('role')
+    db.session.commit()
+
+    return redirect(url_for('user'))
 
 @app.get('/admin/user/confirm-delete/<int:user_id>')
 def confirm_delete(user_id):
     module = 'user'
-    sql = text("SELECT * FROM user where id = :user_id")
-    result = db.session.execute(sql, {"user_id": user_id})
-    user = dict(result.fetchone()._mapping)
-    return render_template('admin/user/confirm_delete.html', module=module, user=user)
+    sql = text("SELECT * FROM user WHERE id = :user_id")
+    result = db.session.execute(sql, {"user_id": user_id}).fetchone()
+    user = None
+    if result:
+        user = dict(result._mapping)
+    else:
+        return redirect(url_for('user'))
+    return render_template(
+        'admin/user/confirm_delete.html',
+        module=module,
+        user=user
+
+    )
 
 
 @app.post('/admin/user/delete')
 def delete_user():
     module = 'user'
     form = request.form
-    user_id = int(form.get('user_id'))
-    sql = text("DELETE FROM user WHERE id = :user_id")
-    db.session.execute(sql, {"user_id": user_id})
+    user_id = form.get('user_id')
+    user = User.query.get(user_id)
+    if not user:
+        return redirect(url_for('user'))
+    db.session.delete(user)
     db.session.commit()
     return redirect(url_for('user'))
 
