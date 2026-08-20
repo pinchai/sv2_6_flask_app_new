@@ -35,7 +35,11 @@
                                 </a>
                             </div>
                             <div class="card-body">
-                                <form action="#" method="POST">
+                                <form
+                                        action="{{ url_for('do_add_user') }}"
+                                        method="POST"
+                                        enctype="multipart/form-data"
+                                >
                                     <div class="form-group">
                                         <img
                                                 src="{{ url_for('static', filename='admin/image/no_image.png') }}"

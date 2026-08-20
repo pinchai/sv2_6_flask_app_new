@@ -45,11 +45,11 @@
                                     </thead>
                                     <tbody>
                                     {% for user in users %}
-                                            <tr>
-                                            <td>{{  user.id }}</td>
+                                        <tr>
+                                            <td>{{ user.id }}</td>
                                             <td>
                                                 <img
-                                                        src="{{ user.profile }}"
+                                                        src="{{ url_for('static', filename='images') }}/{{ user.profile }}"
                                                         alt=""
                                                         style="width: 50px; height: 50px; object-fit: contain; border-radius: 50%;"
                                                         onerror="this.src='{{ url_for('static', filename='admin/image/no_image.png') }}';"
