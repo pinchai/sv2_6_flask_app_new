@@ -253,16 +253,6 @@ def admin_do_login():
     return redirect(url_for('dashboard'))
 
 
-# @app.before_request
-# def before_request():
-#     path = request.path
-#     if 'admin' in path:
-#         if session.get('is_login'):
-#             return redirect(url_for('dashboard'))
-#         else:
-#             return redirect(url_for('admin_login'))
-#     return None
-
 
 if __name__ == '__main__':
     app.run()
