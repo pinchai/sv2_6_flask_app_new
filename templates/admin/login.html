@@ -52,7 +52,7 @@
             <p class="login-box-msg">Sign in to start your session</p>
 
             <form
-                    action="{{ url_for('admin_do_login') }}"
+                    action="{{ url_for('admin_bp.admin_do_login') }}"
                     method="post"
             >
                 <label class="visually-hidden" for="loginEmail">Username</label>
@@ -97,7 +97,7 @@
         </div>
     </div>
 </main>
-{% include 'admin/share/footer_script.html' %} }
+{% include 'admin/share/footer_script.html' %}
 </body>
 
 </html>
