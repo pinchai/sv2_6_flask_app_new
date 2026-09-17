@@ -2,9 +2,11 @@ from admin import admin_bp
 from flask import render_template
 from flask import session, redirect, request, url_for
 from werkzeug.security import check_password_hash
-from  extensions import db
+from extensions import db
 from sqlalchemy import text
 from functools import wraps
+
+from extensions import limiter
 
 
 def login_required(view):
@@ -16,14 +18,19 @@ def login_required(view):
 
     return wrapped
 
+
 @admin_bp.get('/login')
+@limiter.limit("10 per minute")
 def admin_login():
     module = 'login'
+    form = request.form
+    username = form.get('username').strip()
     session.clear()
     return render_template('admin/login.html')
 
 
 @admin_bp.post('/login')
+@limiter.limit("3 per minute")
 def admin_do_login():
     module = 'login'
     form = request.form

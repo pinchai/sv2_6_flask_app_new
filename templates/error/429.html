@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>429 - Too Many Requests</title>
+
+    <!-- Bootstrap 4.6 -->
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    >
+
+    <!-- Font Awesome 5 -->
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    >
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Source Sans Pro", Arial, sans-serif;
+            background: #f4f6f9;
+            color: #343a40;
+        }
+
+        /* ========================================
+           HEADER
+        ======================================== */
+
+        .main-header {
+            height: 57px;
+            background: #ffffff;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            color: #343a40;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .brand:hover {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .brand i {
+            color: #007bff;
+            margin-right: 10px;
+        }
+
+        .brand span {
+            font-weight: 300;
+        }
+
+        /* ========================================
+           MAIN
+        ======================================== */
+
+        .content-wrapper {
+            min-height: calc(100vh - 57px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ========================================
+           ERROR CONTAINER
+        ======================================== */
+
+        .error-container {
+            width: 100%;
+            max-width: 900px;
+            background: #ffffff;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .10);
+            overflow: hidden;
+        }
+
+        .error-header {
+            height: 5px;
+            background: #ffc107;
+        }
+
+        .error-body {
+            padding: 60px 50px;
+            text-align: center;
+        }
+
+        /* ========================================
+           ICON
+        ======================================== */
+
+        .error-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 25px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+            background: #fff3cd;
+            color: #856404;
+
+            font-size: 42px;
+        }
+
+        /* ========================================
+           ERROR CODE
+        ======================================== */
+
+        .error-code {
+            margin: 0;
+
+            font-size: 90px;
+            line-height: 1;
+            font-weight: 700;
+
+            color: #343a40;
+            letter-spacing: -3px;
+        }
+
+        .error-title {
+            margin-top: 15px;
+            margin-bottom: 10px;
+
+            font-size: 30px;
+            font-weight: 400;
+
+            color: #343a40;
+        }
+
+        .error-message {
+            max-width: 600px;
+            margin: 0 auto 30px;
+
+            color: #6c757d;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        /* ========================================
+           RATE LIMIT BOX
+        ======================================== */
+
+        .rate-limit {
+            max-width: 500px;
+            margin: 0 auto 30px;
+
+            padding: 16px 20px;
+
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .rate-limit-icon {
+            width: 36px;
+            height: 36px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-right: 12px;
+
+            border-radius: 4px;
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .rate-limit-content {
+            text-align: left;
+        }
+
+        .rate-limit-label {
+            display: block;
+            font-size: 12px;
+            color: #868e96;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .rate-limit strong {
+            color: #dc3545;
+            font-size: 15px;
+        }
+
+        /* ========================================
+           BUTTONS
+        ======================================== */
+
+        .error-actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-custom {
+            min-width: 140px;
+            padding: 10px 20px;
+
+            border-radius: 4px;
+
+            font-size: 14px;
+            font-weight: 400;
+
+            transition: all .15s ease;
+        }
+
+        .btn-home {
+            background: #007bff;
+            border: 1px solid #007bff;
+            color: #ffffff;
+        }
+
+        .btn-home:hover {
+            background: #0069d9;
+            border-color: #0062cc;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .btn-back {
+            background: #ffffff;
+            border: 1px solid #6c757d;
+            color: #6c757d;
+        }
+
+        .btn-back:hover {
+            background: #6c757d;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        /* ========================================
+           FOOTER
+        ======================================== */
+
+        .main-footer {
+            padding: 15px 25px;
+
+            background: #ffffff;
+            border-top: 1px solid #dee2e6;
+
+            color: #6c757d;
+            font-size: 13px;
+
+            text-align: center;
+        }
+
+        .main-footer strong {
+            color: #495057;
+        }
+
+        /* ========================================
+           MOBILE
+        ======================================== */
+
+        @media (max-width: 768px) {
+
+            .main-header {
+                padding: 0 15px;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .error-body {
+                padding: 45px 20px;
+            }
+
+            .error-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 34px;
+            }
+
+            .error-code {
+                font-size: 68px;
+            }
+
+            .error-title {
+                font-size: 25px;
+            }
+
+            .error-message {
+                font-size: 15px;
+            }
+
+            .rate-limit {
+                text-align: left;
+            }
+
+            .error-actions {
+                flex-direction: column;
+            }
+
+            .btn-custom {
+                width: 100%;
+                max-width: 260px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+<!-- Content -->
+<div class="content-wrapper">
+
+    <main class="content">
+
+        <div class="error-container">
+
+            <!-- Warning Line -->
+            <div class="error-header"></div>
+
+            <div class="error-body">
+
+                <!-- Icon -->
+                <div class="error-icon">
+                    <i class="fas fa-hourglass-half"></i>
+                </div>
+
+                <!-- Error Code -->
+                <h1 class="error-code">
+                    429
+                </h1>
+
+                <!-- Title -->
+                <h2 class="error-title">
+                    Too Many Requests
+                </h2>
+
+                <!-- Message -->
+                <p class="error-message">
+                    You have sent too many requests in a short period of time.
+                    Please wait a moment and try again.
+                </p>
+
+                <!-- Rate Limit -->
+                <div class="rate-limit">
+
+                    <div class="rate-limit-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+
+                    <div class="rate-limit-content">
+
+                        <span class="rate-limit-label">
+                            API Rate Limit
+                        </span>
+
+                        <strong>
+                            10 requests per 1 minute
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <!-- Actions -->
+                <div class="error-actions">
+
+                    <a href="/" class="btn btn-custom btn-home">
+                        <i class="fas fa-home mr-2"></i>
+                        Back to Home
+                    </a>
+
+                    <a
+                            href="javascript:history.back()"
+                            class="btn btn-custom btn-back"
+                    >
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Go Back
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
