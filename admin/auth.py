@@ -22,9 +22,6 @@ def login_required(view):
 @admin_bp.get('/login')
 @limiter.limit("10 per minute")
 def admin_login():
-    module = 'login'
-    form = request.form
-    username = form.get('username').strip()
     session.clear()
     return render_template('admin/login.html')
 

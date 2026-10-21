@@ -37,8 +37,8 @@
                 </li>
 
                 {# product management #}
-                <li class="nav-item menu-open1">
-                    <a href="#" class="nav-link">
+                <li class="nav-item {{ 'menu-open' if module in ['brand', 'category', 'product'] else '' }}">
+                    <a href="#" class="nav-link {{ 'active' if module in ['brand', 'category', 'product'] else '' }}">
                         <i class="nav-icon bi bi-speedometer"></i>
                         <p>
                             Product Management
@@ -47,19 +47,19 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="./index.html" class="nav-link active">
+                            <a href="{{ url_for('admin_bp.brand') }}" class="nav-link {{ 'active' if module == 'brand' else '' }}">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Brand</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="./index2.html" class="nav-link">
+                            <a href="{{ url_for('admin_bp.category') }}" class="nav-link {{ 'active' if module == 'category' else '' }}">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Category</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="./index3.html" class="nav-link">
+                            <a href="{{ url_for('admin_bp.product') }}" class="nav-link {{ 'active' if module == 'product' else '' }}">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Product</p>
                             </a>

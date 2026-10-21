@@ -66,9 +66,10 @@
             <li class="nav-item dropdown user-menu">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <img
-                            src="{{ url_for('static', filename='images') }}/{{ session.get('profile') }}"
+                            src="{{ url_for('static', filename='images/' + (session.get('profile') or '')) }}"
                             class="user-image rounded-circle shadow"
                             alt="User Image"
+                            onerror="this.src='{{ url_for('static', filename='admin/image/no_image.png') }}';"
                     />
                     <span class="d-none d-md-inline">{{ session.get('username') }}</span>
                 </a>
@@ -76,9 +77,10 @@
                     <!--begin::User Image-->
                     <li class="user-header text-bg-primary">
                         <img
-                                src="{{ url_for('static', filename='images') }}/{{ session.get('profile') }}"
+                                src="{{ url_for('static', filename='images/' + (session.get('profile') or '')) }}"
                                 class="rounded-circle shadow"
                                 alt="User Image"
+                                onerror="this.src='{{ url_for('static', filename='admin/image/no_image.png') }}';"
                         />
                         <p>
                             {{ session.get('username') }} - {{ session.get('role') }}

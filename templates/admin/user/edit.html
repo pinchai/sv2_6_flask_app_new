@@ -38,11 +38,15 @@
                                 <form
                                         action="{{ url_for('admin_bp.do_edit_user') }}"
                                         method="POST"
+                                        enctype="multipart/form-data"
                                 >
+                                    <!-- CSRF token -->
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
                                     <input type="hidden" name="user_id" value="{{ user.id }}">
                                     <div class="form-group">
                                         <img
-                                                src="{{ url_for('static', filename='/images') }}/{{ user.profile }}"
+                                                src="{{ url_for('static', filename='images/' + (user.profile or '')) }}"
                                                 alt="User Image"
                                                 id="image_preview"
                                                 style="width: 100px; height: 100px; object-fit: contain;"
@@ -98,8 +102,9 @@
                                                 name="role"
                                                 required
                                         >
-                                            <option value="user"  {{  'selected' if user.role == 'user' }}>User</option>
-                                            <option value="admin" {{  'selected' if user.role == 'admin' }}>Admin</option>
+                                            <option value="user"  {{ 'selected' if user.role == 'user' }}>User</option>
+                                            <option value="admin" {{ 'selected' if user.role == 'admin' }}>Admin
+                                            </option>
                                         </select>
                                     </div>
                                     <hr>
@@ -122,10 +127,12 @@
 {% block script %}
     <script>
         var loadFile = function (event) {
-            var output = document.getElementById('image_preview');
-            output.src = URL.createObjectURL(event.target.files[0]);
-            output.onload = function () {
-                URL.revokeObjectURL(output.src) // free memory
+            if (event.target.files && event.target.files[0]) {
+                var output = document.getElementById('image_preview');
+                output.src = URL.createObjectURL(event.target.files[0]);
+                output.onload = function () {
+                    URL.revokeObjectURL(output.src) // free memory
+                }
             }
         };
     </script>

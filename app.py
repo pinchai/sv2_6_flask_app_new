@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 
 from config import Config
-from extensions import db, migrate, limiter
+from extensions import db, migrate, limiter, csrf, core
 
 from front import front_bp
 from admin import admin_bp
@@ -13,10 +13,14 @@ app.config.from_object(Config)
 db.init_app(app)
 migrate.init_app(app, db)
 limiter.init_app(app)
-
+csrf.init_app(app)
+core.init_app(app, resources={
+    r"/api/*": {"origins": "http://localhost:4200"}
+})
 app.register_blueprint(front_bp, url_prefix="/")
 app.register_blueprint(admin_bp, url_prefix="/admin")
 app.register_blueprint(api_bp, url_prefix="/api")
+csrf.exempt(api_bp)
 
 
 @app.errorhandler(404)

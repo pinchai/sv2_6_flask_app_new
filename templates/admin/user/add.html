@@ -40,6 +40,8 @@
                                         method="POST"
                                         enctype="multipart/form-data"
                                 >
+                                    <!-- CSRF token -->
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                     <div class="form-group">
                                         <img
                                                 src="{{ url_for('static', filename='admin/image/no_image.png') }}"
@@ -97,10 +99,12 @@
 {% block script %}
     <script>
         var loadFile = function (event) {
-            var output = document.getElementById('image_preview');
-            output.src = URL.createObjectURL(event.target.files[0]);
-            output.onload = function () {
-                URL.revokeObjectURL(output.src) // free memory
+            if (event.target.files && event.target.files[0]) {
+                var output = document.getElementById('image_preview');
+                output.src = URL.createObjectURL(event.target.files[0]);
+                output.onload = function () {
+                    URL.revokeObjectURL(output.src) // free memory
+                }
             }
         };
     </script>

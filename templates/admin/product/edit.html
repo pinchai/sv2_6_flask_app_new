@@ -1,0 +1,139 @@
+{% extends 'admin/master.html' %}
+
+{% block content %}
+    <main class="app-main">
+
+        <div class="app-content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3 class="mb-0">Edit Product</h3>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-end">
+                            <li class="breadcrumb-item"><a href="{{ url_for('admin_bp.dashboard') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url_for('admin_bp.product') }}">Products</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Edit</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="app-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <a href="{{ url_for('admin_bp.product') }}" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left"></i>
+                                    Back
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <form
+                                        action="{{ url_for('admin_bp.do_edit_product') }}"
+                                        method="POST"
+                                        enctype="multipart/form-data"
+                                >
+                                    <!-- CSRF token -->
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <input type="hidden" name="product_id" value="{{ product.id }}">
+
+                                    <div class="form-group mb-3">
+                                        <img
+                                                src="{{ url_for('static', filename='images/' + (product.image or '')) }}"
+                                                alt="Product Image"
+                                                id="image_preview"
+                                                style="width: 120px; height: 120px; object-fit: contain;"
+                                                onerror="this.src='{{ url_for('static', filename='admin/image/no_image.png') }}';"
+                                        >
+                                        <input
+                                                type="file"
+                                                class="form-control mt-2"
+                                                id="image"
+                                                name="image"
+                                                accept="image/*"
+                                                onchange="loadFile(event)"
+                                        >
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="name">Product Name</label>
+                                            <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    id="name"
+                                                    name="name"
+                                                    value="{{ product.name }}"
+                                                    required
+                                            >
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="price">Price ($)</label>
+                                            <input
+                                                    type="number"
+                                                    step="0.01"
+                                                    min="0"
+                                                    class="form-control"
+                                                    id="price"
+                                                    name="price"
+                                                    value="{{ product.price }}"
+                                                    required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="category_id">Category</label>
+                                            <select class="form-control" id="category_id" name="category_id">
+                                                <option value="">-- Select Category --</option>
+                                                {% for cat in categories %}
+                                                    <option value="{{ cat.id }}" {{ 'selected' if product.category_id == cat.id else '' }}>{{ cat.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="brand_id">Brand</label>
+                                            <select class="form-control" id="brand_id" name="brand_id">
+                                                <option value="">-- Select Brand --</option>
+                                                {% for b in brands %}
+                                                    <option value="{{ b.id }}" {{ 'selected' if product.brand_id == b.id else '' }}>{{ b.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="description">Description</label>
+                                        <textarea class="form-control" id="description" name="description" rows="4">{{ product.description or '' }}</textarea>
+                                    </div>
+                                    <hr>
+                                    <button type="submit" class="btn btn-primary float-end">
+                                        <i class="bi bi-floppy"></i>
+                                        Update Product
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block script %}
+    <script>
+        var loadFile = function (event) {
+            if (event.target.files && event.target.files[0]) {
+                var output = document.getElementById('image_preview');
+                output.src = URL.createObjectURL(event.target.files[0]);
+                output.onload = function () {
+                    URL.revokeObjectURL(output.src); // free memory
+                }
+            }
+        };
+    </script>
+{% endblock %}

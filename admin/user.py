@@ -1,15 +1,12 @@
 from admin import admin_bp
-from flask import render_template
+from flask import render_template, request, redirect, url_for, session
 from admin.auth import login_required
 from sqlalchemy import text
 from extensions import db
-
 from werkzeug.security import generate_password_hash
-from flask import request, redirect, url_for
 from models.user import User
-from werkzeug.utils import secure_filename
 import os
-from helpers import allowed, UPLOAD_DIR
+from helpers import allowed, UPLOAD_DIR, save_image
 
 
 @admin_bp.get('/user')
@@ -38,10 +35,8 @@ def add_user():
 @login_required
 def do_add_user():
     form = request.form
-    file = request.files["image"]
-    if file and allowed(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(UPLOAD_DIR, filename))
+    file = request.files.get("image")
+    filename = save_image(file)
 
     password = generate_password_hash(form.get('password'))
     user = User(
@@ -81,15 +76,38 @@ def do_edit_user():
     module = 'user'
     form = request.form
 
-    user = User.query.get(form.get('user_id'))
+    user_id = form.get('user_id')
+    user = db.session.get(User, user_id)
+    if not user:
+        return redirect(url_for('admin_bp.user'))
 
     user.username = form.get('username')
     user.email = form.get('email')
-    user.profile = 'new profile'
     user.role = form.get('role')
-    if form.get('password') is not None and form.get('password') != '':
-        user.password = generate_password_hash(form.get('password'))
+
+    file = request.files.get("image")
+    new_filename = save_image(file)
+    if new_filename:
+        if user.profile:
+            old_path = os.path.join(UPLOAD_DIR, user.profile)
+            if os.path.isfile(old_path):
+                try:
+                    os.remove(old_path)
+                except Exception:
+                    pass
+        user.profile = new_filename
+
+    password = form.get('password')
+    if password is not None and password.strip() != '':
+        user.password = generate_password_hash(password)
+
     db.session.commit()
+
+    if session.get('user_id') == user.id:
+        session['profile'] = user.profile
+        session['username'] = user.username
+        session['email'] = user.email
+        session['role'] = user.role
 
     return redirect(url_for('admin_bp.user'))
 
@@ -109,7 +127,6 @@ def confirm_delete(user_id):
         'admin/user/confirm_delete.html',
         module=module,
         user=user
-
     )
 
 
@@ -119,9 +136,18 @@ def delete_user():
     module = 'user'
     form = request.form
     user_id = form.get('user_id')
-    user = User.query.get(user_id)
+    user = db.session.get(User, user_id)
     if not user:
         return redirect(url_for('admin_bp.user'))
+
+    if user.profile:
+        old_path = os.path.join(UPLOAD_DIR, user.profile)
+        if os.path.isfile(old_path):
+            try:
+                os.remove(old_path)
+            except Exception:
+                pass
+
     db.session.delete(user)
     db.session.commit()
     return redirect(url_for('admin_bp.user'))

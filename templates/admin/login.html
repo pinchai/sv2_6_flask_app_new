@@ -55,6 +55,9 @@
                     action="{{ url_for('admin_bp.admin_do_login') }}"
                     method="post"
             >
+                <!-- CSRF token -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
                 <label class="visually-hidden" for="loginEmail">Username</label>
                 <div class="input-group mb-3">
                     <input
