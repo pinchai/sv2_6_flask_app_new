@@ -8,3 +8,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = "change-this"
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=1440)  # session TTL
+
+    # --- JWT config ---
+    JWT_SECRET_KEY = "gdfgahsdfya345678e6233@@%$"  # put in ENV in production
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=30)

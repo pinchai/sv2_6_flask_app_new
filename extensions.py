@@ -9,6 +9,9 @@ from flask_wtf.csrf import CSRFProtect
 from flask_cors import CORS
 
 
+from flask_jwt_extended import (JWTManager)
+
+
 db = SQLAlchemy()
 migrate = Migrate()
 
@@ -20,3 +23,4 @@ limiter = Limiter(
 csrf = CSRFProtect()
 
 core = CORS()
+jwt = JWTManager()

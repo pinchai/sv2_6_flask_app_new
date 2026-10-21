@@ -6,9 +6,12 @@ from werkzeug.security import generate_password_hash
 from helpers import UPLOAD_DIR, save_image
 import os
 
+from flask_jwt_extended import (jwt_required)
+
 
 @api_bp.get('/user')
 @api_bp.get('/users')
+@jwt_required()
 def get_users():
     users = User.query.all()
     return jsonify([u.to_dict() for u in users]), 200
