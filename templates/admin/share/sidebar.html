@@ -1,6 +1,6 @@
 <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
     <div class="sidebar-brand">
-        <a href="./index.html" class="brand-link">
+        <a href="{{ url_for('admin_bp.dashboard') }}" class="brand-link">
             <img
                     src="{{ url_for('static', filename='admin/image/logo.png') }}"
                     alt="AdminLTE Logo"
@@ -13,58 +13,48 @@
         <nav class="mt-2">
             <ul
                     class="nav sidebar-menu flex-column"
-                    data-lte-toggle="treeview"
                     role="navigation"
                     aria-label="Main navigation"
-                    data-accordion="false"
                     id="navigation"
             >
                 {# dashboard #}
                 <li class="nav-item">
                     <a href="{{ url_for('admin_bp.dashboard') }}" class="nav-link {{ 'active' if module == 'dashboard' else '' }}">
                         <i class="nav-icon bi bi-house"></i>
-                        <p>dashboard</p>
+                        <p>Dashboard</p>
                     </a>
                 </li>
 
                 {# user #}
                 <li class="nav-item">
-                    <a href="{{ url_for('admin_bp.user') }}"
-                       class="nav-link {{ 'active' if module == 'user' else '' }}">
+                    <a href="{{ url_for('admin_bp.user') }}" class="nav-link {{ 'active' if module == 'user' else '' }}">
                         <i class="nav-icon bi bi-person"></i>
                         <p>User</p>
                     </a>
                 </li>
 
-                {# product management #}
-                <li class="nav-item {{ 'menu-open' if module in ['brand', 'category', 'product'] else '' }}">
-                    <a href="#" class="nav-link {{ 'active' if module in ['brand', 'category', 'product'] else '' }}">
-                        <i class="nav-icon bi bi-speedometer"></i>
-                        <p>
-                            Product Management
-                            <i class="nav-arrow bi bi-chevron-right"></i>
-                        </p>
+                {# brand #}
+                <li class="nav-item">
+                    <a href="{{ url_for('admin_bp.brand') }}" class="nav-link {{ 'active' if module == 'brand' else '' }}">
+                        <i class="nav-icon bi bi-award"></i>
+                        <p>Brand</p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ url_for('admin_bp.brand') }}" class="nav-link {{ 'active' if module == 'brand' else '' }}">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Brand</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url_for('admin_bp.category') }}" class="nav-link {{ 'active' if module == 'category' else '' }}">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Category</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url_for('admin_bp.product') }}" class="nav-link {{ 'active' if module == 'product' else '' }}">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Product</p>
-                            </a>
-                        </li>
-                    </ul>
+                </li>
+
+                {# category #}
+                <li class="nav-item">
+                    <a href="{{ url_for('admin_bp.category') }}" class="nav-link {{ 'active' if module == 'category' else '' }}">
+                        <i class="nav-icon bi bi-tags"></i>
+                        <p>Category</p>
+                    </a>
+                </li>
+
+                {# product #}
+                <li class="nav-item">
+                    <a href="{{ url_for('admin_bp.product') }}" class="nav-link {{ 'active' if module == 'product' else '' }}">
+                        <i class="nav-icon bi bi-box-seam"></i>
+                        <p>Product</p>
+                    </a>
                 </li>
 
             </ul>
